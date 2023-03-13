@@ -1,5 +1,12 @@
 <template>
-  <v-navigation-drawer app v-model="drawer" width="250" disable-resize-watcher right overlay-opacity="0.8">
+  <v-navigation-drawer
+    app
+    v-model="drawer"
+    width="250"
+    disable-resize-watcher
+    right
+    overlay-opacity="0.8"
+  >
     <!-- 博主介绍 -->
     <div class="blogger-info">
       <v-avatar size="110" style="margin-bottom:0.5rem">
@@ -66,11 +73,11 @@
           <i class="iconfont iconbiaoqian" /> 标签
         </router-link>
       </div>
-      <div class="menus-item">
+      <!-- <div class="menus-item">
         <router-link to="/links">
           <i class="iconfont iconlianjie" /> 友链
         </router-link>
-      </div>
+      </div> -->
       <div class="menus-item">
         <router-link to="/about">
           <i class="iconfont iconzhifeiji" /> 关于

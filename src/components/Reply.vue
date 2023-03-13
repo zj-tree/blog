@@ -80,7 +80,10 @@ export default {
       // const arr = path.split("/");
       const path = this.$route.fullPath;
       const arr = path.split("=");
-      const id = arr[1];
+      var id = arr[1];
+      if (!id) {
+        id = path.split("/")[2];
+      }
       var comment = {
         type: this.type,
         replyUserId: this.replyUserId,

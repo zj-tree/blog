@@ -5,19 +5,35 @@
     <div class="comment-wrapper">
       <div style="display:flex;width:100%">
         <v-avatar size="36">
-          <img v-if="this.$store.state.avatar" :src="this.$store.state.avatar" />
+          <img
+            v-if="this.$store.state.avatar"
+            :src="this.$store.state.avatar"
+          />
           <img v-else :src="this.$store.state.blogInfo.touristAvatar" />
         </v-avatar>
         <div style="width:100%" class="ml-3">
           <div class="comment-input">
-            <textarea class="comment-textarea" v-model="commentContent" placeholder="留下点什么吧..." auto-grow dense />
+            <textarea
+              class="comment-textarea"
+              v-model="commentContent"
+              placeholder="留下点什么吧..."
+              auto-grow
+              dense
+            />
           </div>
           <!-- 操作按钮 -->
           <div class="emoji-container">
-            <span :class="chooseEmoji ? 'emoji-btn-active' : 'emoji-btn'" @click="chooseEmoji = !chooseEmoji">
+            <span
+              :class="chooseEmoji ? 'emoji-btn-active' : 'emoji-btn'"
+              @click="chooseEmoji = !chooseEmoji"
+            >
               <i class="iconfont iconbiaoqing" />
             </span>
-            <button @click="insertComment" class="upload-btn v-comment-btn" style="margin-left:auto">
+            <button
+              @click="insertComment"
+              class="upload-btn v-comment-btn"
+              style="margin-left:auto"
+            >
               提交
             </button>
           </div>
@@ -29,7 +45,11 @@
     <!-- 评论详情 -->
     <div v-if="count > 0 && reFresh">
       <!-- 评论列表 -->
-      <div class="comment-wrapper" v-for="(item, index) of commentList" :key="item.id">
+      <div
+        class="comment-wrapper"
+        v-for="(item, index) of commentList"
+        :key="item.id"
+      >
         <!-- 头像 -->
         <v-avatar size="40" class="comment-avatar">
           <img :src="item.avatar" />
@@ -52,7 +72,10 @@
             <!-- 发表时间 -->
             <span style="margin-right:10px">{{ item.createTime | date }}</span>
             <!-- 点赞 -->
-            <span :class="isLike(item.id) + ' iconfont icondianzan'" @click="like(item)" />
+            <span
+              :class="isLike(item.id) + ' iconfont icondianzan'"
+              @click="like(item)"
+            />
             <span v-show="item.likeCount > 0"> {{ item.likeCount }}</span>
             <!-- 回复 -->
             <span class="reply-btn" @click="replyComment(index, item)">
@@ -62,7 +85,11 @@
           <!-- 评论内容 -->
           <p v-html="item.commentContent" class="comment-content"></p>
           <!-- 回复人 -->
-          <div style="display:flex" v-for="reply of item.replyDTOList" :key="reply.id">
+          <div
+            style="display:flex"
+            v-for="reply of item.replyDTOList"
+            :key="reply.id"
+          >
             <!-- 头像 -->
             <v-avatar size="36" class="comment-avatar">
               <img :src="reply.avatar" />
@@ -85,7 +112,10 @@
                   {{ reply.createTime | date }}
                 </span>
                 <!-- 点赞 -->
-                <span :class="isLike(reply.id) + ' iconfont icondianzan'" @click="like(reply)" />
+                <span
+                  :class="isLike(reply.id) + ' iconfont icondianzan'"
+                  @click="like(reply)"
+                />
                 <span v-show="reply.likeCount > 0"> {{ reply.likeCount }}</span>
                 <!-- 回复 -->
                 <span class="reply-btn" @click="replyComment(index, reply)">
@@ -99,7 +129,12 @@
                   <span v-if="!reply.replyWebSite" class="ml-1">
                     @{{ reply.replyNickname }}
                   </span>
-                  <a v-else :href="reply.replyWebSite" target="_blank" class="comment-nickname ml-1">
+                  <a
+                    v-else
+                    :href="reply.replyWebSite"
+                    target="_blank"
+                    class="comment-nickname ml-1"
+                  >
                     @{{ reply.replyNickname }}
                   </a>
                   ，
@@ -109,21 +144,38 @@
             </div>
           </div>
           <!-- 回复数量 -->
-          <div class="mb-3" style="font-size:0.75rem;color:#6d757a" v-show="item.replyCount > 3" ref="check">
+          <div
+            class="mb-3"
+            style="font-size:0.75rem;color:#6d757a"
+            v-show="item.replyCount > 3"
+            ref="check"
+          >
             共
             <b>{{ item.replyCount }}</b>
             条回复，
-            <span style="color:#00a1d6;cursor:pointer" @click="checkReplies(index, item)">
+            <span
+              style="color:#00a1d6;cursor:pointer"
+              @click="checkReplies(index, item)"
+            >
               点击查看
             </span>
           </div>
           <!-- 回复分页 -->
-          <div class="mb-3" style="font-size:0.75rem;color:#222;display:none" ref="paging">
+          <div
+            class="mb-3"
+            style="font-size:0.75rem;color:#222;display:none"
+            ref="paging"
+          >
             <span style="padding-right:10px">
               共{{ Math.ceil(item.replyCount / 5) }}页
             </span>
-            <paging ref="page" :totalPage="Math.ceil(item.replyCount / 5)" :index="index" :commentId="item.id"
-              @changeReplyCurrent="changeReplyCurrent" />
+            <paging
+              ref="page"
+              :totalPage="Math.ceil(item.replyCount / 5)"
+              :index="index"
+              :commentId="item.id"
+              @changeReplyCurrent="changeReplyCurrent"
+            />
           </div>
           <!-- 回复框 -->
           <Reply :type="type" ref="reply" @reloadReply="reloadReply" />
@@ -148,6 +200,7 @@ import Reply from "./Reply";
 import Paging from "./Paging";
 import Emoji from "./Emoji";
 import EmojiList from "../assets/js/emoji";
+import { addComment } from "@/api/comment";
 export default {
   components: {
     Reply,
@@ -162,7 +215,7 @@ export default {
   created() {
     this.listComments();
   },
-  data: function () {
+  data: function() {
     return {
       reFresh: true,
       commentContent: "",
@@ -244,7 +297,7 @@ export default {
           this.$emit("getCommentCount", this.count);
         });
     },
-    insertComment() {
+    async insertComment() {
       //判断登录
       if (!this.$store.state.userId) {
         this.$store.state.loginFlag = true;
@@ -257,7 +310,7 @@ export default {
       }
       //解析表情
       var reg = /\[.+?\]/g;
-      this.commentContent = this.commentContent.replace(reg, function (str) {
+      this.commentContent = this.commentContent.replace(reg, function(str) {
         return (
           "<img src= '" +
           EmojiList[str] +
@@ -267,35 +320,52 @@ export default {
       //发送请求
       const path = this.$route.path;
       const arr = path.split("/");
-      var comment = {
+      const id = arr[2];
+      const comment = {
+        topicId: id,
         commentContent: this.commentContent,
         type: this.type
       };
-      switch (this.type) {
-        case 1:
-        case 3:
-          comment.topicId = arr[2];
-          break;
-        default:
-          break;
-      }
+      console.log(comment);
       this.commentContent = "";
-      this.axios.post("/api/comments", comment).then(({ data }) => {
-        if (data.flag) {
-          // 查询最新评论
-          this.current = 1;
-          this.listComments();
-          const isReview = this.$store.state.blogInfo.websiteConfig
-            .isCommentReview;
-          if (isReview) {
-            this.$toast({ type: "warnning", message: "评论成功，正在审核中" });
-          } else {
-            this.$toast({ type: "success", message: "评论成功" });
-          }
-        } else {
-          this.$toast({ type: "error", message: data.message });
-        }
-      });
+      await addComment(comment);
+      this.current = 1;
+      this.listComments();
+      const isReview = this.$store.state.blogInfo.isCommentReview;
+      if (isReview === "1") {
+        this.$toast({ type: "warnning", message: "评论成功，正在审核中" });
+      } else {
+        this.$toast({ type: "success", message: "评论成功" });
+      }
+      // var comment = {
+      //   commentContent: this.commentContent,
+      //   type: this.type
+      // };
+      // switch (this.type) {
+      //   case 1:
+      //   case 3:
+      //     comment.topicId = arr[2];
+      //     break;
+      //   default:
+      //     break;
+      // }
+      // this.commentContent = "";
+      // this.axios.post("/api/comments", comment).then(({ data }) => {
+      //   if (data.flag) {
+      //     // 查询最新评论
+      //     this.current = 1;
+      //     this.listComments();
+      //     const isReview = this.$store.state.blogInfo.websiteConfig
+      //       .isCommentReview;
+      //     if (isReview) {
+      //       this.$toast({ type: "warnning", message: "评论成功，正在审核中" });
+      //     } else {
+      //       this.$toast({ type: "success", message: "评论成功" });
+      //     }
+      //   } else {
+      //     this.$toast({ type: "error", message: data.message });
+      //   }
+      // });
     },
     like(comment) {
       // 判断登录
@@ -339,7 +409,7 @@ export default {
   },
   computed: {
     isLike() {
-      return function (commentId) {
+      return function(commentId) {
         var commentLikeSet = this.$store.state.commentLikeSet;
         return commentLikeSet.indexOf(commentId) != -1 ? "like-active" : "like";
       };

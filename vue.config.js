@@ -11,7 +11,7 @@ module.exports = {
       // },
       "/blog": {
         target: "http://127.0.0.1:10000",
-        changeOrigin: true,
+        changeOrigin: true
         // pathRewrite: {
         //   "^/blog": "/blog"
         // }

@@ -24,3 +24,10 @@ export function sendTalk(data) {
     data: data
   });
 }
+
+export function getTalkInfo(talkId) {
+  return request({
+    url: `${bash}/${talkId}`,
+    method: "get"
+  });
+}

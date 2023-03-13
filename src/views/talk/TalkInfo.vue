@@ -10,11 +10,11 @@
         <!-- 用户信息 -->
         <div class="user-info-wrapper">
           <v-avatar size="36" class="user-avatar">
-            <img :src="talkInfo.avatar" />
+            <img :src="talkInfo.userAvatarUrl" />
           </v-avatar>
           <div class="user-detail-wrapper">
             <div class="user-nickname">
-              {{ talkInfo.nickname }}
+              {{ talkInfo.userName }}
               <v-icon class="user-sign" size="20" color="#ffa51e">
                 mdi-check-decagram
               </v-icon>
@@ -24,11 +24,11 @@
             <!-- 说说信息 -->
             <div class="talk-content" v-html="talkInfo.content" />
             <!-- 图片列表 -->
-            <v-row class="talk-images" v-if="talkInfo.imgList">
+            <v-row class="talk-images" v-if="talkInfo.images">
               <v-col
                 :md="4"
                 :cols="6"
-                v-for="(img, index) of talkInfo.imgList"
+                v-for="(img, index) of talkInfo.images"
                 :key="index"
               >
                 <v-img
@@ -72,7 +72,8 @@
 </template>
 
 <script>
-import Comment from "../../components/TalkComment";
+import Comment from "../../components/Comment";
+import { getTalkInfo } from "@/api/talk";
 export default {
   components: {
     Comment
@@ -89,13 +90,16 @@ export default {
     };
   },
   methods: {
-    getTalkById() {
-      this.axios
-        .get("/api/talks/" + this.$route.params.talkId)
-        .then(({ data }) => {
-          this.talkInfo = data.data;
-          this.previewList = this.talkInfo.imgList;
-        });
+    async getTalkById() {
+      let { data } = await getTalkInfo(this.$route.params.talkId);
+      this.talkInfo = data;
+      this.previewList = this.talkInfo.images;
+      // this.axios
+      //   .get("/api/talks/" + this.$route.params.talkId)
+      //   .then(({ data }) => {
+      //     this.talkInfo = data.data;
+      //     this.previewList = this.talkInfo.imgList;
+      //   });
     },
     getCommentCount(count) {
       this.commentCount = count;
@@ -112,18 +116,19 @@ export default {
         this.$store.state.loginFlag = true;
         return false;
       }
+      console.log(talk);
       // 发送请求
-      this.axios.post("/api/talks/" + talk.id + "/like").then(({ data }) => {
-        if (data.flag) {
-          // 判断是否点赞
-          if (this.$store.state.talkLikeSet.indexOf(talk.id) != -1) {
-            this.$set(talk, "likeCount", talk.likeCount - 1);
-          } else {
-            this.$set(talk, "likeCount", talk.likeCount + 1);
-          }
-          this.$store.commit("talkLike", talk.id);
-        }
-      });
+      // this.axios.post("/api/talks/" + talk.id + "/like").then(({ data }) => {
+      //   if (data.flag) {
+      //     // 判断是否点赞
+      //     if (this.$store.state.talkLikeSet.indexOf(talk.id) != -1) {
+      //       this.$set(talk, "likeCount", talk.likeCount - 1);
+      //     } else {
+      //       this.$set(talk, "likeCount", talk.likeCount + 1);
+      //     }
+      //     this.$store.commit("talkLike", talk.id);
+      //   }
+      // });
     }
   },
   computed: {

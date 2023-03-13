@@ -2,7 +2,7 @@ import request from "@/utils/request";
 
 export function getComment(type, id, data) {
   return request({
-    url: "blog/comment/getCommon/" + type + "/" + id,
+    url: "/blog/comment/getCommon/" + type + "/" + id,
     method: "get",
     params: data
   });
@@ -17,7 +17,7 @@ export function addComment(data) {
 
 export function reComment(commentId) {
   return request({
-    url: `blog/comment/${commentId}/replies`,
+    url: `/blog/comment/${commentId}/replies`,
     method: "get"
   });
 }

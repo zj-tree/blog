@@ -287,7 +287,10 @@ export default {
       //查看评论
       const path = this.$route.fullPath;
       const arr = path.split("=");
-      const id = arr[1];
+      var id = arr[1];
+      if (!id) {
+        id = path.split("/")[2];
+      }
       const { data } = await getComment(this.type, id, {
         pageNum: this.current,
         pageSize: 5
@@ -324,7 +327,10 @@ export default {
       });
       const path = this.$route.fullPath;
       const arr = path.split("=");
-      const id = arr[1];
+      var id = arr[1];
+      if (!id) {
+        id = path.split("/")[2];
+      }
       const comment = {
         topicId: id,
         commentContent: this.commentContent,
@@ -358,8 +364,6 @@ export default {
       }
     },
     async reloadReply(index) {
-      console.log(index);
-      console.log(this.commentList[index].commentId);
       const { data } = await reComment(this.commentList[index].commentId);
       this.commentList[index].replyCount++;
       if (this.commentList[index].replyCount > 5) {

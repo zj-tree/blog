@@ -73,11 +73,11 @@
             </li>
           </ul>
         </div>
-        <div class="menus-item">
+        <!-- <div class="menus-item">
           <router-link class="menu-btn" to="/links">
             <i class="iconfont iconlianjie" /> 友链
           </router-link>
-        </div>
+        </div> -->
         <div class="menus-item">
           <router-link class="menu-btn" to="/about">
             <i class="iconfont iconzhifeiji" /> 关于
